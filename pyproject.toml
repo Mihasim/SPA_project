@@ -11,6 +11,7 @@ django = "^4.2.8"
 psycopg2-binary = "^2.9.9"
 pillow = "^10.1.0"
 djangorestframework = "^3.14.0"
+django-filter = "^23.5"
 
 
 [build-system]
