@@ -9,16 +9,32 @@ class Command(BaseCommand):
     Добавление пользователей (пример)
     """
     def handle(self, *args, **options):
-        users_list = [
-            {'email': '1@mail.com', 'phone': '123344566', 'city': '1', 'is_active': True},
-            {'email': '2@mail.com', 'phone': '123344566', 'city': '2', 'is_active': True},
-            {'email': '3@mail.com', 'phone': '123344566', 'city': '3', 'is_active': True},
-        ]
+        user = User.objects.create(
+            email='123@mail.com',
+            phone='123344123',
+            city='1',
+            is_staff=True,
+            is_active=True
+        )
+        user.set_password('5482')
+        user.save()
 
-        users_for_create = []
-        for user in users_list:
-            users_for_create.append(
-                User(**user)
-            )
+        user = User.objects.create(
+            email='456@mail.com',
+            phone='123344456',
+            city='2',
+            is_staff=True,
+            is_active=True
+        )
+        user.set_password('5482')
+        user.save()
 
-        User.objects.bulk_create(users_for_create)
+        user = User.objects.create(
+            email='789@mail.com',
+            phone='123344789',
+            city='3',
+            is_active=True
+        )
+        user.set_password('5482')
+        user.save()
+
