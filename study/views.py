@@ -5,7 +5,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated, BasePermission, SAFE_METHODS, IsAuthenticatedOrReadOnly
 
 from study.models import Course, Lesson, Payments
-from study.permissions import IsOwnerOrStaff, IsOwner, CoursePermission
+from study.permissions import IsOwnerOrStaff, IsOwner, CoursePermission, IsModerator
 from study.serializers import CourseSerializer, LessonSerializer, PaymentsSerializer
 
 
@@ -50,12 +50,12 @@ class LessonListAPIView(generics.ListAPIView):
     """
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    permission_classes = [IsOwnerOrStaff]
+    permission_classes = [IsModerator]
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
     """
-    Контроллер для вывода урока
+    Контроллер для вывода одного урока
     """
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
