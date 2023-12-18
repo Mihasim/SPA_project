@@ -1,12 +1,10 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
-from rest_framework.filters import OrderingFilter
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated, BasePermission, SAFE_METHODS, IsAuthenticatedOrReadOnly
 
-from study.models import Course, Lesson, Payments
+from study.models import Course, Lesson
 from study.permissions import IsOwnerOrStaff, IsOwner, CoursePermission, IsModerator
-from study.serializers import CourseSerializer, LessonSerializer, PaymentsSerializer
+from study.serializers import CourseSerializer, LessonSerializer
 
 
 class REadOnly(BasePermission):
@@ -79,13 +77,4 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
     permission_classes = [IsOwner]
 
 
-class PaymentsListAPIView(generics.ListAPIView):
-    """
-    Контроллер для вывода списка платежей
-    """
-    serializer_class = PaymentsSerializer
-    queryset = Payments.objects.all()
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ('paid_course', 'paid_lesson', 'payment_method')  # фильтровать можно по этим полям
-    ordering_fields = ('date_payments',)  # сортировка по дате оплаты
-    permission_classes = [IsAuthenticated]
+
