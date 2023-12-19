@@ -7,7 +7,8 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from users.views import UserViewSet, PaymentsListAPIView, UserSubscriptionCreateAPIView, UserSubscriptionDestroyAPIView
+from users.views import UserViewSet, PaymentsListAPIView, UserSubscriptionCreateAPIView, UserSubscriptionDestroyAPIView, \
+    UserSubscriptionListAPIView
 
 app_name = UsersConfig.name
 
@@ -24,5 +25,6 @@ urlpatterns = [
 
     # UserSubscription
     path('subscription/create/', UserSubscriptionCreateAPIView.as_view(), name='subscription_create'),
+    path('subscription/', UserSubscriptionListAPIView.as_view(), name='subscription_list'),
     path('subscription/delete/<int:pk>/', UserSubscriptionDestroyAPIView.as_view(), name='subscription_delete'),
 ] + router.urls

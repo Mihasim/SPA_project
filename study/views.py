@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics
-from rest_framework.permissions import IsAuthenticated, BasePermission, SAFE_METHODS, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, BasePermission, SAFE_METHODS, IsAuthenticatedOrReadOnly, AllowAny
 
 from study.models import Course, Lesson
+from study.paginators import CoursePaginator, lessonPaginator
 from study.permissions import IsOwnerOrStaff, IsOwner, CoursePermission, IsModerator
 from study.serializers import CourseSerializer, LessonSerializer
 
@@ -22,6 +23,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     permission_classes = [CoursePermission]
+    pagination_class = CoursePaginator
 
     def perform_create(self, serializer):
         purchased_course = serializer.save()
@@ -48,7 +50,8 @@ class LessonListAPIView(generics.ListAPIView):
     """
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    permission_classes = [IsModerator]
+    permission_classes = [AllowAny]
+    pagination_class = lessonPaginator
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):

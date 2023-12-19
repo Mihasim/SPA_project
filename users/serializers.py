@@ -22,6 +22,9 @@ class PaymentsSerializer(serializers.ModelSerializer):
 
 
 class UserSubscriptionSerializer(serializers.ModelSerializer):
+    """
+    Сереализатор подписок
+    """
     class Meta:
         model = UserSubscriptions
         fields = '__all__'

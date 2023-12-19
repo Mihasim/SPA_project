@@ -28,12 +28,9 @@ class User(AbstractUser):
 
 
 class UserSubscriptions(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='пользователь', related_name='subscribers')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE,
+                                      verbose_name='подписчик')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='курс')
-    sign_of_subscription = models.BooleanField(default=True, verbose_name='признак подписки')
-
-    subscriptions = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE,
-                                      verbose_name='подписки')
 
     def __str__(self):
         return f'{self.user},{self.course},{self.sign_of_subscription}'

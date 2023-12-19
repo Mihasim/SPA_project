@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from users.models import User, Payments, UserSubscriptions
 from users.serializers import UserSerializer, PaymentsSerializer, UserSubscriptionSerializer
 
@@ -31,17 +31,29 @@ class UserSubscriptionCreateAPIView(generics.CreateAPIView):
     """
     Контроллер для создания подписки
     """
-
     queryset = UserSubscriptions.objects.all()
     serializer_class = UserSubscriptionSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+
+    def perform_create(self, serializer):
+        subscription_lesson = serializer.save()
+        subscription_lesson.user = self.request.user
+        subscription_lesson.save()
+
+
+class UserSubscriptionListAPIView(generics.ListAPIView):
+    """
+    Контроллер для вывода подписок
+    """
+    queryset = UserSubscriptions.objects.all()
+    serializer_class = UserSubscriptionSerializer
+    permission_classes = [AllowAny]
 
 
 class UserSubscriptionDestroyAPIView(generics.DestroyAPIView):
     """
     Контроллер удаления создания подписки
     """
-
     queryset = UserSubscriptions.objects.all()
     serializer_class = UserSubscriptionSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
