@@ -1,6 +1,4 @@
 from django.core.management import BaseCommand
-
-from study.models import Payments
 from users.models import User
 
 

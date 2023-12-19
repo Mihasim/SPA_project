@@ -51,15 +51,8 @@ class CourseSerializer(serializers.ModelSerializer):
         Функция для получения признака подписки
         """
         request = self.context.get('request')
-        #print(request.user.email)
-        #print(obj)
-        print(UserSubscriptions.objects.all())
-        #print(request.user.email)
-        print(request.user.pk)
-        subscribers_set = UserSubscriptions.objects.filter(course=obj)
-        #if UserSubscriptions.objects.filter(course=obj.id) == True:
-        #    print("Подписан")
-        #    return True
+        if UserSubscriptions.objects.filter(user_id=request.user.pk).exists():
+            return True
         return False
 
 

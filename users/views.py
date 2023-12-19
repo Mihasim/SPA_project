@@ -26,6 +26,7 @@ class PaymentsListAPIView(generics.ListAPIView):
     ordering_fields = ('date_payments',)  # сортировка по дате оплаты
     permission_classes = [IsAuthenticated]
 
+
 class UserSubscriptionCreateAPIView(generics.CreateAPIView):
     """
     Контроллер для создания подписки

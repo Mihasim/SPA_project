@@ -17,12 +17,9 @@ class IsModerator(BasePermission):
     manage = "Вы не являетесь модератором"
     def has_permission(self, request, view):
         if request.user.is_authenticated:
-            try:
-                group = request.user.groups.all()[0].name
-                if group == 'Модератор':
-                    return True
-            except IndexError:
-                return False
+            if request.user.groups.filter(name='Модератор').exists():  # Проверка на модератора
+                return True
+            return False
 
 
 class IsOwnerOrStaff(BasePermission):
@@ -32,14 +29,9 @@ class IsOwnerOrStaff(BasePermission):
     manage = "Вы не являетесь владельцем или модератором"
     def has_permission(self, request, view):
         if request.user.is_authenticated:
-            try:
-                group = request.user.groups.all()[0].name
-                if group == 'Модератор':
-                    return True
-            except IndexError:
-                return False
-
-            return request.user == view.get_object().owner
+            if request.user.groups.filter(name='Модератор').exists():  # Проверка на модератора
+                return True
+            return request.user == view.get_object().owner  # Проверка на владельца
 
 
 class CoursePermission(BasePermission):
