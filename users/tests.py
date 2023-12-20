@@ -15,7 +15,8 @@ class SubscriptionTestCase(APITestCase):
         self.course = Course.objects.create(
             name='Test course',
             description='Test Course description',
-            owner=self.user, )
+            owner=self.user,
+        )
         self.lesson = Lesson.objects.create(
             name='Test lesson',
             description='Test lesson description',
@@ -25,7 +26,6 @@ class SubscriptionTestCase(APITestCase):
         self.subscriptions = UserSubscriptions.objects.create(
             course=self.course,
         )
-
 
     def test_subscriptions_view(self):
         """
@@ -46,7 +46,7 @@ class SubscriptionTestCase(APITestCase):
         Тестирование создания подписки
         """
         data = {
-            'course': 1
+            'course': self.course
         }
         response = self.client.post(
             '/users/subscription/create/',

@@ -10,10 +10,14 @@ class LessonSerializer(serializers.ModelSerializer):
     """
     Сереализатор для уроков
     """
+
+
     class Meta:
         model = Lesson
         fields = '__all__'
         validators = [LinkValidator(field='link_on_video')]
+
+
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -25,7 +29,6 @@ class CourseSerializer(serializers.ModelSerializer):
     subscribers_count = serializers.SerializerMethodField(read_only=True)
     subscribers = UserSubscriptionSerializer(source='usersubscriptions_set', many=True, read_only=True)
     is_subscribed = serializers.SerializerMethodField(read_only=True)
-
     class Meta:
         model = Course
         fields = '__all__'

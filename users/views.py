@@ -31,15 +31,10 @@ class UserSubscriptionCreateAPIView(generics.CreateAPIView):
     """
     Контроллер для создания подписки
     """
+
     queryset = UserSubscriptions.objects.all()
     serializer_class = UserSubscriptionSerializer
     permission_classes = [AllowAny]
-
-    def perform_create(self, serializer):
-        subscription_lesson = serializer.save()
-        subscription_lesson.user = self.request.user
-        subscription_lesson.save()
-
 
 class UserSubscriptionListAPIView(generics.ListAPIView):
     """
@@ -49,11 +44,11 @@ class UserSubscriptionListAPIView(generics.ListAPIView):
     serializer_class = UserSubscriptionSerializer
     permission_classes = [AllowAny]
 
-
 class UserSubscriptionDestroyAPIView(generics.DestroyAPIView):
     """
     Контроллер удаления создания подписки
     """
+
     queryset = UserSubscriptions.objects.all()
     serializer_class = UserSubscriptionSerializer
     permission_classes = [AllowAny]
