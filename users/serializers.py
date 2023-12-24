@@ -23,6 +23,7 @@ class PaymentsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
 class UserSubscriptionSerializer(serializers.ModelSerializer):
     """
     Сереализатор подписок

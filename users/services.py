@@ -31,4 +31,5 @@ def get_payment(price):
         line_items=[{"price": price, "quantity": 1}],
         mode="payment",
     )
-    print(stripe.checkout.Session.lst(limit=10))
+    print(stripe.checkout.Session.list(limit=1).data[0].url)
+    return stripe.checkout.Session.list(limit=1).data[0].url

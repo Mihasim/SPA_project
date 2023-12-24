@@ -55,6 +55,7 @@ class Payments(models.Model):
     paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='оплаченный урок', **NULLABLE)
     payment_amount = models.IntegerField(verbose_name='сумма оплаты', **NULLABLE)
     payment_method = models.CharField(max_length=50, verbose_name='способ оплаты', choices=PAYMENT_METHODS)
+    payment_link = models.CharField(max_length=800, verbose_name='Сылка на оплату', **NULLABLE)
 
     def __str__(self):
         return f'{self.user}, {self.date_payments}, {self.payment_amount}, {self.payment_method}'

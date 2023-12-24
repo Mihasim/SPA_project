@@ -28,10 +28,8 @@ class PaymentsViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         purchased_payment = serializer.save()
         purchased_payment.user = self.request.user
-        get_payment(purchased_payment.paid_course.course_id)
-
+        purchased_payment.payment_link = get_payment(purchased_payment.paid_course.course_id)  # Возвращаем ссылку на оплату
         purchased_payment.save()
-        print(purchased_payment.paid_course.course_id)
 
 
 class UserSubscriptionCreateAPIView(generics.CreateAPIView):
