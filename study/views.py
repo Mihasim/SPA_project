@@ -27,7 +27,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         purchased_course = serializer.save()
-        purchased_course.owner = self.request.user
+        purchased_course.user = self.request.user
         purchased_course.save()
 
 

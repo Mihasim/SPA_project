@@ -8,10 +8,11 @@ class Course(models.Model):
     name = models.CharField(max_length=50, verbose_name='Название курса')
     preview = models.ImageField(upload_to='course_preview/', verbose_name='Превью', **NULLABLE)
     description = models.TextField(verbose_name='Описание', **NULLABLE)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE, verbose_name='Владелец')
+    price = models.PositiveIntegerField(verbose_name='Цена')
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.name}, {self.owner}, {self.price}'
 
     class Meta:
         verbose_name = 'курс'
@@ -24,10 +25,11 @@ class Lesson(models.Model):
     preview = models.ImageField(upload_to='lesson_preview/', verbose_name='Превью', **NULLABLE)
     link_on_video = models.TextField(verbose_name='Ссылка на видео', **NULLABLE)
     course_lesson = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Курс')
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE, verbose_name='Владелец')
+    price = models.PositiveIntegerField(verbose_name='Цена')
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.name}, {self.course_lesson}, {self.owner}, {self.price}'
 
     class Meta:
         verbose_name = 'урок'

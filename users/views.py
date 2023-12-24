@@ -15,16 +15,19 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     permission_classes = [IsAdminUser]
 
-class PaymentsListAPIView(generics.ListAPIView):
+
+class PaymentsViewSet(viewsets.ModelViewSet):
     """
-    Контроллер для вывода списка платежей
+    Контроллер для списка платежей (CRUD)
     """
     serializer_class = PaymentsSerializer
     queryset = Payments.objects.all()
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ('paid_course', 'paid_lesson', 'payment_method')  # фильтровать можно по этим полям
-    ordering_fields = ('date_payments',)  # сортировка по дате оплаты
     permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        purchased_payment = serializer.save()
+        purchased_payment.user = self.request.user
+        purchased_payment.save()
 
 
 class UserSubscriptionCreateAPIView(generics.CreateAPIView):
@@ -36,6 +39,7 @@ class UserSubscriptionCreateAPIView(generics.CreateAPIView):
     serializer_class = UserSubscriptionSerializer
     permission_classes = [AllowAny]
 
+
 class UserSubscriptionListAPIView(generics.ListAPIView):
     """
     Контроллер для вывода подписок
@@ -43,6 +47,7 @@ class UserSubscriptionListAPIView(generics.ListAPIView):
     queryset = UserSubscriptions.objects.all()
     serializer_class = UserSubscriptionSerializer
     permission_classes = [AllowAny]
+
 
 class UserSubscriptionDestroyAPIView(generics.DestroyAPIView):
     """
