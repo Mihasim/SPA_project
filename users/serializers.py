@@ -1,4 +1,5 @@
 import requests
+import stripe
 from rest_framework import serializers
 
 from users.models import User, Payments, UserSubscriptions
@@ -20,11 +21,6 @@ class PaymentsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payments
         fields = '__all__'
-
-
-    def get_payment_link(self):
-        url = 'https://api.stripe.com/v1/checkout/sessions'
-        response = requests.request('GET', url)
 
 
 class UserSubscriptionSerializer(serializers.ModelSerializer):

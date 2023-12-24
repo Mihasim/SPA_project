@@ -6,6 +6,7 @@ from study.models import Course, Lesson
 from study.paginators import CoursePaginator, lessonPaginator
 from study.permissions import IsOwnerOrStaff, IsOwner, CoursePermission, IsModerator
 from study.serializers import CourseSerializer, LessonSerializer
+from users.services import create_good
 
 
 class REadOnly(BasePermission):
@@ -22,13 +23,15 @@ class CourseViewSet(viewsets.ModelViewSet):
     """
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
-    permission_classes = [CoursePermission]
+    permission_classes = [IsAuthenticated]
     pagination_class = CoursePaginator
 
     def perform_create(self, serializer):
         purchased_course = serializer.save()
-        purchased_course.user = self.request.user
+        purchased_course.owner = self.request.user
+        purchased_course.course_id = create_good(purchased_course.name, purchased_course.description, purchased_course.price)  # Создаем товар и получаем его id
         purchased_course.save()
+
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
@@ -42,6 +45,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
         purchased_lesson = serializer.save()
         purchased_lesson.owner = self.request.user
         purchased_lesson.save()
+        create_good(purchased_lesson.name, purchased_lesson.description, purchased_lesson.price)
 
 
 class LessonListAPIView(generics.ListAPIView):

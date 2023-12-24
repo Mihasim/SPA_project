@@ -5,6 +5,7 @@ from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from users.models import User, Payments, UserSubscriptions
 from users.serializers import UserSerializer, PaymentsSerializer, UserSubscriptionSerializer
+from users.services import get_payment
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -27,7 +28,10 @@ class PaymentsViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         purchased_payment = serializer.save()
         purchased_payment.user = self.request.user
+        get_payment(purchased_payment.paid_course.course_id)
+
         purchased_payment.save()
+        print(purchased_payment.paid_course.course_id)
 
 
 class UserSubscriptionCreateAPIView(generics.CreateAPIView):
