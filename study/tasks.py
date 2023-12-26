@@ -26,5 +26,6 @@ def check_user_last_login():
     for user in User.objects.all():
         if user.last_login is not None:
             if user.last_login <= current_time - timedelta(days=120):
-                user.is_active = False
+                if user.is_active:
+                    user.is_active = False
                 user.save()
