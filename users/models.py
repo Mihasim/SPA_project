@@ -33,7 +33,7 @@ class UserSubscriptions(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='курс')
 
     def __str__(self):
-        return f'{self.user},{self.course},{self.sign_of_subscription}'
+        return f'{self.user},{self.course}'
 
     class Meta:
         verbose_name = 'пользовательская подписка'

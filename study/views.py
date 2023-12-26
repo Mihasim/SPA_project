@@ -6,6 +6,8 @@ from study.models import Course, Lesson
 from study.paginators import CoursePaginator, lessonPaginator
 from study.permissions import IsOwnerOrStaff, IsOwner, CoursePermission, IsModerator
 from study.serializers import CourseSerializer, LessonSerializer
+from study.tasks import update_course
+from users.models import UserSubscriptions
 from users.services import create_good
 
 
@@ -32,6 +34,16 @@ class CourseViewSet(viewsets.ModelViewSet):
         purchased_course.course_id = create_good(purchased_course.name, purchased_course.description, purchased_course.price)  # Создаем товар и получаем его id
         purchased_course.save()
 
+    def perform_update(self, serializer):
+        purchased_course = serializer.save()
+
+        subscribers = UserSubscriptions.objects.filter(course_id=purchased_course.id)
+        if subscribers.exists():
+            subscriber_list = []
+            for subscriber in subscribers:
+                subscriber_list.append(subscriber.user.email)
+            update_course.delay(subscriber_list, purchased_course.name)
+            print(f'обновлен курс {purchased_course.name}, на него подписаны: {", ".join(subscriber_list)}.')
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
@@ -44,8 +56,19 @@ class LessonCreateAPIView(generics.CreateAPIView):
     def perform_create(self, serializer):
         purchased_lesson = serializer.save()
         purchased_lesson.owner = self.request.user
+        purchased_lesson.lesson_id = create_good(purchased_lesson.name, purchased_lesson.description, purchased_lesson.price)  # Создаем товар и получаем его id
         purchased_lesson.save()
-        create_good(purchased_lesson.name, purchased_lesson.description, purchased_lesson.price)
+
+        subscribers = UserSubscriptions.objects.filter(course_id=purchased_lesson.course_lesson.id)
+        if subscribers.exists():
+            subscriber_list = []
+            for subscriber in subscribers:
+                subscriber_list.append(subscriber.user.email)
+            update_course.delay(subscriber_list, purchased_lesson.course_lesson.name)
+            print(f'Для курса {purchased_lesson.course_lesson.name} добавлен урок {purchased_lesson.name} на него подписаны: {", ".join(subscriber_list)}.')
+
+
+
 
 
 class LessonListAPIView(generics.ListAPIView):
@@ -74,6 +97,17 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsOwnerOrStaff]
+
+    def perform_update(self, serializer):
+        purchased_lesson = serializer.save()
+
+        subscribers = UserSubscriptions.objects.filter(course_id=purchased_lesson.course_lesson.id)
+        if subscribers.exists():
+            subscriber_list = []
+            for subscriber in subscribers:
+                subscriber_list.append(subscriber.user.email)
+            update_course(purchased_lesson.course_lesson.name, subscriber_list)
+        print(f'Для курса {purchased_lesson.course_lesson.name} обновлен урок {purchased_lesson.name} на него подписаны: {", ".join(subscriber_list)}.')
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):

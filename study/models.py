@@ -28,6 +28,7 @@ class Lesson(models.Model):
     course_lesson = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Курс')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE, verbose_name='Владелец')
     price = models.PositiveIntegerField(verbose_name='Цена')
+    lesson_id = models.CharField(max_length=50, verbose_name='id курса', **NULLABLE)
 
     def __str__(self):
         return f'{self.name}, {self.course_lesson}, {self.owner}, {self.price}'

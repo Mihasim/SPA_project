@@ -19,6 +19,9 @@ coreapi = "^2.3.3"
 pyyaml = "^6.0.1"
 requests = "^2.31.0"
 stripe = "^7.10.0"
+celery = "^5.3.6"
+redis = "^5.0.1"
+django-celery-beat = "^2.5.0"
 
 
 [build-system]
