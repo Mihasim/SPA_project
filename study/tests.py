@@ -101,7 +101,7 @@ class UpdateLessonTest(APITestCase):
         """
         response = self.client.put(
             f'/lesson/update/{self.lesson.id}/',
-            data=self.data
+                    data=self.data
         )
 
         self.assertEqual(
@@ -202,6 +202,6 @@ class DeleteLessonTest(APITestCase):
             status.HTTP_204_NO_CONTENT
         )
 
-        self.assertEqual(
-            Lesson.objects.count(), 0
-        )
+                    self.assertEqual(
+                        Lesson.objects.count(), 0
+                    )
